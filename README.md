@@ -7,8 +7,10 @@ of the new implementation.
 
 ## Current status
 
-Stage 0: project scaffold and v1 review. No new scientific implementation is
-included yet.
+Stage 1 classical baselines are implemented and tested. Stage 2 neural models
+and their bounded validation search are implemented; run the configured
+comparison on Colab or another CUDA machine before treating the neural results
+as complete.
 
 ## Setup
 
@@ -26,8 +28,8 @@ build.
 
 ## Stage 1: classical baselines
 
-After installing requirements, run the CPU baseline sweeps and make plots
-from their saved CSV:
+After installing requirements, run the CPU baseline sweep and make plots from
+its saved CSV:
 
 ```powershell
 py -m experiments.run_stage1
@@ -39,6 +41,38 @@ The Kalman result is explicitly a Bussgang-linearized filter with the true
 Jakes coefficient and a white temporal-residual approximation, not an exact
 nonlinear Bayesian filter. Stage 1 uses NumPy/SciPy and should not require
 Colab; GPU work becomes useful for neural-model training and full sweeps.
+
+## Stage 2: neural comparisons
+
+The Stage 2 protocol is explicit in `configs/stage2.yaml`. It trains and
+validation-selects GRU, LSTM, causal windowed FNN/CNN, and the published
+Gao et al. selective-input prediction DNN. The FNN and CNN use the same
+20-slot causal history as the recurrent models. The Gao SIP-DNN is a
+single-slot comparator: its parallel refinement and modified-prediction
+networks use only high-resolution ADC observations, as in the original paper.
+It is not the signal-reconstruction cascade described under the same name in
+the thesis.
+
+Run the bounded search and held-out evaluation with:
+
+```powershell
+py -m experiments.run_stage2 --config configs/stage2.yaml
+```
+
+The configured search has four candidates per neural architecture, the same
+train/validation/test splits and training budget, and selects settings using
+validation NMSE only. Results include all classical estimators and a strict
+two-scalar comparison guard. If a method fails that guard, its CSV/JSON
+diagnostic outputs are still saved and the command exits unsuccessfully.
+The script requires a clean Git worktree so each result records the exact
+source commit. A CUDA GPU is recommended for the 20-candidate search; local
+CPU execution is suitable for tests and small checks.
+
+The verified original reference is Shen Gao et al., “Deep Learning Based
+Channel Estimation for Massive MIMO With Mixed-Resolution ADCs,” *IEEE
+Communications Letters*, vol. 23, no. 11, pp. 1989–1993, 2019,
+doi: [10.1109/LCOMM.2019.2936393](https://doi.org/10.1109/LCOMM.2019.2936393),
+also available as [arXiv:1908.06245](https://arxiv.org/abs/1908.06245).
 
 ## Layout
 

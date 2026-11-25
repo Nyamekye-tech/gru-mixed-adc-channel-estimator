@@ -27,7 +27,9 @@ approval of the corresponding stage.
 0. Review v1 and establish the project scaffold.
 1. Implement and test channel/quantizer models and classical baselines.
 2. Implement fair neural-model comparisons and tune each model within a
-   documented, bounded search.
+   documented, bounded search. The verified Gao et al. (2019) SIP-DNN is a
+   single-slot selective-input model using high-resolution observations; do
+   not conflate it with the thesis's unverified signal-reconstruction cascade.
 3. Run the pre-registered full experiments and ablations.
 4. Generate publication figures/tables from saved results and draft the paper
    around the results actually obtained.

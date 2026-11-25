@@ -1,0 +1,53 @@
+experiment:
+  name: stage2-neural-model-comparison
+  seed: 2026
+  output_dir: results
+
+system:
+  n_antennas: 32
+  n_slots: 20
+  channel_power: 1.0
+  carrier_frequency_hz: 2600000000
+  pilot_spacing_s: 0.0005
+  pilot_symbol: [1.0, 0.0]
+  high_resolution_indices: [0, 8, 16, 24]
+
+channel:
+  temporal_model: gauss_markov_jakes
+  spatial_model: exponential_toeplitz_ula
+  spatial_alpha: 0.7
+
+adc:
+  low_resolution_bits: 1
+  clip_sigma: 3.0
+  one_bit_output_levels: [-1.0, 1.0]
+
+evaluation:
+  snr_db: 10
+  velocity_kmh: 60
+
+training:
+  train_sequences: 2000
+  validation_sequences: 500
+  test_sequences: 2000
+  batch_size: 128
+  epochs: 25
+  learning_rate: 0.001
+  optimizer: Adam
+  loss: mean_squared_error
+  device: auto
+  cpu_num_threads: 4
+  bidirectional: false
+  window_length: 20
+  sequence_target_mode: all_slots
+  window_padding: left_zero
+  cnn_causal: true
+
+search:
+  hidden_sizes: [64, 128]
+  depths: [2, 3]
+  sip_output_scale: 3.0
+
+comparison:
+  reference: two_scalar
+  tolerance_nmse: 1.0e-12
