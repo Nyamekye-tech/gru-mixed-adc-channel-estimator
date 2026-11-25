@@ -1,0 +1,33 @@
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Notebook runtime state
+.ipynb_checkpoints/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# Local datasets, model weights, and large generated results
+data/
+datasets/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+results/raw/
+results/large/
+results/figures/
+
+# Source documents can contain personal information
+*.pdf
+
+# Preserve the source notebook locally; track its legacy copy instead
+/Mobility_Aware_GRU_MixedADC_ChannelEstimation.ipynb
