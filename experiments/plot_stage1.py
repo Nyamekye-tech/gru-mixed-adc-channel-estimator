@@ -27,8 +27,15 @@ def plot_sweep(
     if subset.empty:
         raise ValueError(f"saved results do not contain the {sweep!r} sweep")
 
-    figure, axis = plt.subplots(figsize=(8, 5))
-    for alpha in sorted(subset["spatial_alpha"].unique()):
+    alphas = sorted(subset["spatial_alpha"].unique())
+    figure, axes = plt.subplots(
+        1,
+        len(alphas),
+        figsize=(6.0 * len(alphas), 5),
+        sharey=True,
+        squeeze=False,
+    )
+    for axis, alpha in zip(axes[0], alphas, strict=True):
         alpha_results = subset.loc[subset["spatial_alpha"] == alpha]
         for baseline in BASELINE_ORDER:
             curve = alpha_results.loc[
@@ -42,14 +49,16 @@ def plot_sweep(
                 curve[x_column],
                 curve["nmse_db"],
                 marker="o",
-                label=f"{baseline}, spatial alpha={alpha:g}",
+                label=baseline,
             )
+        axis.set_title(f"Spatial correlation alpha={alpha:g}")
+        axis.set_xlabel(x_label)
+        axis.grid(alpha=0.3)
 
-    axis.set_xlabel(x_label)
-    axis.set_ylabel("NMSE (dB)")
-    axis.grid(alpha=0.3)
-    axis.legend(fontsize=8)
-    figure.tight_layout()
+    axes[0, 0].set_ylabel("NMSE (dB)")
+    handles, labels = axes[0, 0].get_legend_handles_labels()
+    figure.legend(handles, labels, loc="lower center", ncol=3, fontsize=8)
+    figure.tight_layout(rect=(0.0, 0.1, 1.0, 1.0))
     output_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_path, dpi=180)
     plt.close(figure)
