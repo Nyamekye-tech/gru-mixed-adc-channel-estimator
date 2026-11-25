@@ -1,0 +1,38 @@
+experiment:
+  name: stage1-classical-baselines
+  seed: 123
+  n_sequences_per_point: 2000
+  batch_size: 256
+  output_dir: results
+
+system:
+  n_antennas: 32
+  n_slots: 20
+  channel_power: 1.0
+  carrier_frequency_hz: 2600000000
+  pilot_spacing_s: 0.0005
+  pilot_symbol: [1.0, 0.0]
+  high_resolution_indices: [0, 8, 16, 24]
+
+channel:
+  temporal_model: gauss_markov_jakes
+  spatial_model: exponential_toeplitz_ula
+  spatial_alphas: [0.0, 0.7]
+
+adc:
+  low_resolution_bits: 1
+  supported_bits: [1, 2, 3]
+  scaling: known_power_agc
+  clip_sigma: 3.0
+  one_bit_output_levels: [-1.0, 1.0]
+
+sweeps:
+  snr_db: [0, 5, 10, 15, 20, 25, 30]
+  snr_sweep_velocity_kmh: 60
+  velocity_kmh: [3, 15, 30, 50, 70, 90, 110, 130]
+  velocity_sweep_snr_db: 10
+
+kalman:
+  observation_model: bussgang_linearized
+  temporal_residual_model: white_approximation
+  use_true_jakes_rho: true

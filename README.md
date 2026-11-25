@@ -18,10 +18,27 @@ py -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
-The experiment configuration and runtime dependencies will be pinned and
-validated as the new implementation is introduced. Heavy datasets, model
-checkpoints, and large raw results belong outside Git (for example, on Google
-Drive); small result CSV/JSON files may be tracked.
+The Stage 1 protocol is configured in `configs/stage1.yaml`. Heavy datasets,
+model checkpoints, and large raw results belong outside Git (for example, on
+Google Drive); small result CSV/JSON files may be tracked. PyTorch wheels may
+need a platform-specific install; Colab already provides a GPU-compatible
+build.
+
+## Stage 1: classical baselines
+
+After installing requirements, run the CPU baseline sweeps and make plots
+from their saved CSV:
+
+```powershell
+py -m experiments.run_stage1
+py -m experiments.plot_stage1
+py -m pytest -q
+```
+
+The Kalman result is explicitly a Bussgang-linearized filter with the true
+Jakes coefficient and a white temporal-residual approximation, not an exact
+nonlinear Bayesian filter. Stage 1 uses NumPy/SciPy and should not require
+Colab; GPU work becomes useful for neural-model training and full sweeps.
 
 ## Layout
 

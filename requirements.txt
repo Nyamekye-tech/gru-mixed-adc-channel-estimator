@@ -1,5 +1,2 @@
-numpy
-scipy
+-e .[experiments,test]
 torch
-matplotlib
-pandas
