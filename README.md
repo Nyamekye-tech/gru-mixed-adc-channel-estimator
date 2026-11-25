@@ -1,4 +1,4 @@
-# Channel Estimator
+# GRU Mixed-ADC Channel Estimator
 
 Reproducible research code for temporal channel estimation in mixed-ADC
 Massive MIMO. The project is being rebuilt from the thesis and its original
