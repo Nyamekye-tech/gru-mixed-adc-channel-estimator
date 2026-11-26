@@ -153,6 +153,8 @@ def _fit_search(
     selected_models: dict[str, nn.Module] = {}
     search_rows: list[dict[str, Any]] = []
     selected_settings: dict[str, dict[str, Any]] = {}
+    candidate_count = len(MODEL_NAMES) * len(config.hidden_sizes) * len(config.depths)
+    candidate_number = 0
 
     for model_index, name in enumerate(MODEL_NAMES):
         best_validation_nmse = float("inf")
@@ -164,6 +166,12 @@ def _fit_search(
 
         for hidden_size in config.hidden_sizes:
             for depth in config.depths:
+                candidate_number += 1
+                print(
+                    f"[{candidate_number}/{candidate_count}] {name}: "
+                    f"hidden_size={hidden_size}, depth={depth}",
+                    flush=True,
+                )
                 seed = _trial_seed(config.seed, model_index, hidden_size, depth)
                 torch.manual_seed(seed)
                 if device.type == "cuda":
@@ -227,6 +235,11 @@ def _fit_search(
             "trial_seed": best_seed,
             "validation_nmse": best_validation_nmse,
         }
+        print(
+            f"Selected {name}: validation NMSE="
+            f"{best_validation_nmse:.6g} at epoch {best_epoch}",
+            flush=True,
+        )
         selected_row = next(
             row
             for row in reversed(search_rows)

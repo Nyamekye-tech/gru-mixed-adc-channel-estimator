@@ -67,6 +67,8 @@ diagnostic outputs are still saved and the command exits unsuccessfully.
 The script requires a clean Git worktree so each result records the exact
 source commit. A CUDA GPU is recommended for the 20-candidate search; local
 CPU execution is suitable for tests and small checks.
+The Colab runner streams and saves the command log to Drive, including when
+the experiment exits before writing result files.
 
 The verified original reference is Shen Gao et al., “Deep Learning Based
 Channel Estimation for Massive MIMO With Mixed-Resolution ADCs,” *IEEE
@@ -77,7 +79,7 @@ also available as [arXiv:1908.06245](https://arxiv.org/abs/1908.06245).
 ## Layout
 
 - `legacy/` — preserved v1 notebook and local reference copy of the thesis
-- `src/chest/` — research package (implementation begins after Stage 0)
+- `src/chest/` — channel models, baselines, neural estimators, and training
 - `configs/` — experiment configurations
 - `tests/` — focused scientific and reproducibility tests
 - `experiments/` — command-line experiment entry points
